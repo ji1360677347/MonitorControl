@@ -68,17 +68,21 @@ class MenuslidersPrefsViewController: NSViewController, SettingsPane {
       self.rowSlidersCombineText.isHidden = false
     }
 
-    if app.macOS10() {
-      self.rowTickCheck.isHidden = true
-      self.rowTickText.isHidden = true
-    } else {
-      self.rowTickCheck.isHidden = false
-      self.rowTickText.isHidden = false
-    }
+    self.rowTickCheck.isHidden = true
+    self.rowTickText.isHidden = true
   }
 
   override func viewDidLoad() {
     super.viewDidLoad()
+
+    // This fork exposes only brightness and volume with continuous sliders.
+    prefs.set(false, forKey: PrefKey.showContrast.rawValue)
+    prefs.set(false, forKey: PrefKey.enableSliderSnap.rawValue)
+    prefs.set(false, forKey: PrefKey.showTickMarks.rawValue)
+    self.showContrastSlider.isHidden = true
+    self.enableSliderSnap.isHidden = true
+    self.showTickMarks.isHidden = true
+
     self.populateSettings()
     prefs.addObserver(self, forKeyPath: PrefKey.menuIcon.rawValue, context: nil)
   }

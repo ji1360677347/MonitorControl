@@ -16,7 +16,6 @@ class MediaKeyTapManager: MediaKeyTapDelegate {
     let isControl = modifiers?.isSuperset(of: NSEvent.ModifierFlags([.control])) ?? false
     let isCommand = modifiers?.isSuperset(of: NSEvent.ModifierFlags([.command])) ?? false
     let isOption = modifiers?.isSuperset(of: NSEvent.ModifierFlags([.option])) ?? false
-    let isShift = modifiers?.isSuperset(of: NSEvent.ModifierFlags([.shift])) ?? false
     if isPressed, isCommand, !isControl, mediaKey == .brightnessDown, DisplayManager.engageMirror() {
       return
     }
@@ -26,14 +25,8 @@ class MediaKeyTapManager: MediaKeyTapDelegate {
     if isPressed, self.handleOpenPrefPane(mediaKey: mediaKey, event: event, modifiers: modifiers) {
       return
     }
-    var isSmallIncrement = isOption && isShift
-    let isContrast = isControl && isOption && isCommand
-    if [.brightnessUp, .brightnessDown].contains(mediaKey), prefs.bool(forKey: PrefKey.useFineScaleBrightness.rawValue) {
-      isSmallIncrement = !isSmallIncrement
-    }
-    if [.volumeUp, .volumeDown, .mute].contains(mediaKey), prefs.bool(forKey: PrefKey.useFineScaleVolume.rawValue) {
-      isSmallIncrement = !isSmallIncrement
-    }
+    let isSmallIncrement = true
+    let isContrast = false
     if isPressed, isControl, !isOption, mediaKey == .brightnessUp || mediaKey == .brightnessDown {
       self.handleDirectedBrightness(isCommandModifier: isCommand, isUp: mediaKey == .brightnessUp, isSmallIncrement: isSmallIncrement)
       return
