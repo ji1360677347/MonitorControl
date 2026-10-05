@@ -112,31 +112,36 @@ class KeyboardPrefsViewController: NSViewController, SettingsPane {
       self.rowUseAudioNameText.isHidden = true
       self.rowUseAudioMouseText.isHidden = false
     }
+
+    self.useFineScale.state = .on
+    self.useFineScale.isEnabled = false
+    self.useFineScaleVolume.state = .on
+    self.useFineScaleVolume.isEnabled = false
   }
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
+    // Contrast shortcuts are intentionally unavailable in this fork.
+    self.customContrastUp.isHidden = true
+    self.customContrastDown.isHidden = true
+    prefs.set(true, forKey: PrefKey.useFineScaleBrightness.rawValue)
+    prefs.set(true, forKey: PrefKey.useFineScaleVolume.rawValue)
+
     let customBrightnessUpRecorder = KeyboardShortcuts.RecorderCocoa(for: .brightnessUp)
     let customBrightnessDownRecorder = KeyboardShortcuts.RecorderCocoa(for: .brightnessDown)
-    let customContrastUpRecorder = KeyboardShortcuts.RecorderCocoa(for: .contrastUp)
-    let customContrastDownRecorder = KeyboardShortcuts.RecorderCocoa(for: .contrastDown)
     let customVolumeUpRecorder = KeyboardShortcuts.RecorderCocoa(for: .volumeUp)
     let customVolumeDownRecorder = KeyboardShortcuts.RecorderCocoa(for: .volumeDown)
     let customMuteRecorder = KeyboardShortcuts.RecorderCocoa(for: .mute)
 
     customBrightnessUpRecorder.placeholderString = NSLocalizedString("Increase", comment: "Shown in record shortcut box")
-    customContrastUpRecorder.placeholderString = customBrightnessUpRecorder.placeholderString
     customVolumeUpRecorder.placeholderString = customBrightnessUpRecorder.placeholderString
     customBrightnessDownRecorder.placeholderString = NSLocalizedString("Decrease", comment: "Shown in record shortcut box")
-    customContrastDownRecorder.placeholderString = customBrightnessDownRecorder.placeholderString
     customVolumeDownRecorder.placeholderString = customBrightnessDownRecorder.placeholderString
     customMuteRecorder.placeholderString = NSLocalizedString("Mute", comment: "Shown in record shortcut box")
 
     self.customBrightnessUp.addSubview(customBrightnessUpRecorder)
     self.customBrightnessDown.addSubview(customBrightnessDownRecorder)
-    self.customContrastUp.addSubview(customContrastUpRecorder)
-    self.customContrastDown.addSubview(customContrastDownRecorder)
     self.customVolumeUp.addSubview(customVolumeUpRecorder)
     self.customVolumeDown.addSubview(customVolumeDownRecorder)
     self.customMute.addSubview(customMuteRecorder)
