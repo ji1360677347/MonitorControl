@@ -85,13 +85,9 @@ class Display: Equatable {
     self.brightnessSyncSourceValue = self.getBrightness()
   }
 
-  func calcNewBrightness(isUp: Bool, isSmallIncrement: Bool) -> Float {
-    var step: Float = (isUp ? 1 : -1) / 16.0
-    let delta = step / 4
-    if isSmallIncrement {
-      step = delta
-    }
-    return min(max(0, ceil((self.getBrightness() + delta) / step) * step), 1)
+  func calcNewBrightness(isUp: Bool, isSmallIncrement _: Bool) -> Float {
+    let step: Float = 0.01
+    return max(0, min(1, self.getBrightness() + (isUp ? step : -step)))
   }
 
   func stepBrightness(isUp: Bool, isSmallIncrement: Bool) {
