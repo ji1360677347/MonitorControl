@@ -215,7 +215,8 @@ class SliderHandler {
     let slider = SliderHandler.MCSlider(value: 0, minValue: 0, maxValue: 1, target: self, action: #selector(SliderHandler.valueChanged))
     let showPercent = prefs.bool(forKey: PrefKey.enableSliderPercent.rawValue)
     slider.isEnabled = true
-    slider.setNumOfCustomTickmarks(prefs.bool(forKey: PrefKey.showTickMarks.rawValue) ? 5 : 0)
+    slider.isContinuous = true
+    slider.setNumOfCustomTickmarks(0)
     self.slider = slider
     if !DEBUG_MACOS10, #available(macOS 11.0, *) {
       slider.frame.size.width = 180
@@ -310,16 +311,6 @@ class SliderHandler {
     }
     var value = slider.floatValue
     self.updateIcon()
-    if prefs.bool(forKey: PrefKey.enableSliderSnap.rawValue) {
-      let intPercent = Int(value * 100)
-      let snapInterval = 25
-      let snapThreshold = 3
-      let closest = (intPercent + snapInterval / 2) / snapInterval * snapInterval
-      if abs(closest - intPercent) <= snapThreshold {
-        value = Float(closest) / 100
-        slider.floatValue = value
-      }
-    }
     if self.percentageBox == self.percentageBox {
       self.percentageBox?.stringValue = "" + String(Int(value * 100)) + "%"
     }
